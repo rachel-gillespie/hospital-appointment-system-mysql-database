@@ -2,16 +2,6 @@
 
 ---
 
-## Table of Contents
-
-| --- | --- |
-| System Description |
-| Sample Queries/Transactions |
-| Conceptual Data Model |
-| Logical Data Model |
-
----
-
 ## System Description
 
 **Department:** Represents the different departments a hospital may have. Includes the attributes `departmentId`, `departmentName`, `location`, `floor`, and `phoneExtension`. `departmentId` is the primary key. A department can have many doctors.

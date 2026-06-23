@@ -1,15 +1,3 @@
--- ============================================================
--- Hospital Appointment System 
-
--- Rachel Gillespie 
-
--- 20118715 
-
--- Database Design and Implementation 
-
--- Databases: MySQL Implementation
--- ============================================================
-
 DROP SCHEMA IF EXISTS hospital_appointment;
 
 -- ============================================================

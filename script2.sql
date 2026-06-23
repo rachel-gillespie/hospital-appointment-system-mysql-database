@@ -1,15 +1,3 @@
--- ============================================================
--- Hospital Appointment System 
-
--- Rachel Gillespie 
-
--- 20118715 
-
--- Database Design and Implementation 
-
--- Databases: MySQL Implementation
--- ============================================================
-
 USE hospital_appointment;
 
 -- Get all appointments for a specific patient, ordered by date. 

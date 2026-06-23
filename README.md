@@ -142,3 +142,17 @@ Lists(prescriptionId, medicationName, notes)
 - Most prescribed medication
 - All doctors and their department, ordered by department
 - Patient age and total appointments using TIMESTAMPDIFF and LEFT JOIN
+
+## Reflection
+
+### Architecture Choices
+- **Multi-valued attributes modelled as separate tables.** Email addresses, phone numbers, and qualifications for both doctors and patients are stored in their own tables (e.g. `DoctorEmail`, `PatientPhone`, `DoctorQualification`) rather than as comma-separated values in a single column. This keeps the schema in first normal form and allows each value to be queried, updated, or deleted independently.
+- **`MedicalRecord` is a weak entity.** It has no independent identifier — its primary key is composed of `patientId` and `date`, relying on `Patient` for existence. A medical record cannot exist without a patient.
+- **`Prescription` is not a weak entity.** Despite only ever being created through an appointment, it has its own `prescriptionId` as a primary key. It is modelled as a dependent entity rather than a weak one.
+- **`InvolvedIn` preserves the `roles` attribute.** The many-to-many relationship between Doctor and Appointment is implemented as a junction table that carries a `roles` attribute, recording each doctor's specific role in a given appointment (e.g. lead, assisting). This information would be lost if the relationship were modelled without the junction table.
+- **`Refers` is a self-referential relationship on Doctor.** A doctor can refer zero or more other doctors and be referred by zero or more doctors. This is implemented as a separate `Refers` table with two foreign keys both pointing back to `Doctor`.
+- **Cascade strategy varies by relationship.** Multi-valued attribute tables use `ON DELETE CASCADE` — if a doctor is deleted, their emails and phone numbers go with them. `Doctor.departmentId` uses `ON DELETE SET NULL` — if a department is deleted, the doctor record is preserved but their department is cleared.
+
+### Limitations
+- `status` on Appointment is constrained to Pending, Confirmed, or Cancelled but is stored as a VARCHAR with a CHECK constraint rather than an ENUM, which is more portable across database systems but less self-documenting in the schema.
+- The `Refers` self-referential relationship does not prevent circular referrals (Doctor A refers Doctor B who refers Doctor A).
